@@ -1,0 +1,125 @@
+Created by Yujin Chung
+Last modified date: Sep 5th, 2014
+
+Please contact Yujin Chung (ychung.wisc@gmail.com) for any problems and questions.
+
+
+The algorithm in Chung et al. (2013) was implemented in this software.
+This software computes (1) the joint distribution of a tree shape and a distance given another tree shape that users specify;
+(2) the joint distributions of a tree shape and a distance given any tree shapes;
+and (3) the exact partition function and approximations explained in Chung et al. (2013).
+
+
+1. How to compile the code
+
+> gcc *.c -lm -o jointDist
+
+
+2. How to run the software
+
+> ./jointDist
+
+3. Settings
+
+Once you execute the software, it asks several questions.
+First of all, you set the number of taxa.
+
+Example)
+# Enter the number of taxa (>= 4): 6
+
+3.1 Options for computing a joint distribution given a tree shape that users set.
+
+If you want to compute a joint distribution given a specific tree shape, you should enter '1'
+for the question of "Do you want to compute the joint distribution for a given tree shape?". 
+If you enter "0", this part of computation will be skipped.
+
+When you enter "1", it will show the number of possible tree shapes. Then, you should enter
+the tree shape ID you want to condition on. Tree shape IDs (ranks) are determined as in Chung et al. (2013). 
+
+Example)
+# Do you want to compute the joint distribution for a given tree shape? (1:yes, 0:no): 1
+#	There are 2 shapes.
+#	Enter the given tree shape ID (starting from 1): 1
+
+In the example above, possible tree shape IDs are 1 and 2.
+
+
+3.2 Options for computing joint distribution given any tree shapes.
+
+The next question is for the computation of joint distributions  given any tree shapes. 
+If you enter "1", the full joint distributions are computed. If you enter '0', then
+this part will be skipped.
+
+Example)
+# Do you want to compute the joint distributions for any given tree shape? (1:yes, 0:no): 0
+
+3.3 Options for computing partition functions and approximations.
+
+If you enter '0' for the question of "Do you want to compute the partition function of a Gibbs distribution?", 
+then this part of computation is skipped. If you enter '1', then
+you should enter the number of segments for the following question.
+ 
+This computation requires the full joint distributions. If you skip the computation (3.2),
+then it will ask if you have a file of the full joint distributions. If you enter '0' (no),
+then the option (3.2) will be automatically executed. If you enter '1', then 
+the joint distributions in the file will be used.
+
+Example)
+# Do you want to compute the partition function of a Gibbs distribution? (1:yes, 0:no): 1
+# 	Enter the number of segments (>=2): 2
+#	Do you have a file of the full joint distribution? (1:yes, 0:no): 1
+
+
+4. Output files
+
+4.1 The joint distribution given a tree shape
+
+If you enter '1' for the question of "Do you want to compute the joint distribution for a given tree shape?",
+then an output file containing the joint distribution is created. 
+
+Example)
+> more JointDistribution_6taxa_Rank1_1.txt
+P(Distance,Rank2|Rank1=1)
+        Distance
+Rank2   3       2       1       0
+1       7.619048e-02    5.714286e-02    4.229421e-18    9.523810e-03
+2       5.714286e-01    2.285714e-01    5.714286e-02    0.000000e+00
+
+
+4.2 The full joint distribution given any tree shape
+
+Example)
+> more JointDistribution_6taxa.txt 
+P(Distance,Rank2|Rank1)
+                Distance
+Rank1   Rank2   3       2       1       0
+1       1       7.619048e-02    5.714286e-02    4.229421e-18    9.523810e-03
+1       2       5.714286e-01    2.285714e-01    5.714286e-02    0.000000e+00
+2       1       9.523810e-02    3.809524e-02    9.523810e-03    0.000000e+00
+2       2       6.095238e-01    1.904762e-01    4.761905e-02    9.523810e-03
+
+
+4.3 Partition functions and approximations
+
+For different beta values (see Chung et al., 2013), the partition functions,
+two approximations (see Chung et al., 2013) on log scale are reported in a file.
+In the example, the file name is "partitionFnct_vs_beta_6taxa_2segments.txt".
+
+Example)
+> head partitionFnct_vs_beta_6taxa_2segments.txt                                                                      
+ntaxa   nseg    beta    logZ    logZ_indep      logZ_NormalApprox
+6       2       3.333333e-06    9.307912e+00    9.307912e+00    9.185276e+00
+6       2       5.000333e-02    9.177409e+00    9.177409e+00    9.063765e+00
+6       2       1.000033e-01    9.047980e+00    9.047980e+00    8.943370e+00
+6       2       1.500033e-01    8.919681e+00    8.919681e+00    8.824128e+00
+6       2       2.000033e-01    8.792573e+00    8.792573e+00    8.706077e+00
+6       2       2.500033e-01    8.666719e+00    8.666719e+00    8.589255e+00
+6       2       3.000033e-01    8.542184e+00    8.542184e+00    8.473705e+00
+6       2       3.500033e-01    8.419035e+00    8.419035e+00    8.359469e+00
+6       2       4.000033e-01    8.297342e+00    8.297342e+00    8.246591e+00
+
+
+
+
+
+
